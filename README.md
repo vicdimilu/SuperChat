@@ -1,5 +1,5 @@
-# E-Commerce-Designer
-ECD CMS
+# SuperChat 
+Sitio Web de Salas de Chat 
 
 Proyecto se separará en dos:
 1. Frontend basado en React + websocket.
