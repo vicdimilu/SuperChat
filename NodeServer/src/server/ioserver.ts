@@ -16,7 +16,7 @@ export class IOServer {
         this.expressServer = ExpressServer.init(port);
         this.serverHTTP = http.createServer(this.expressServer.app);
 
-        let originURL:string = "http://127.0.0.1:"+port;
+        let originURL:string = "*";
 
         this.app = new SocketIO.Server(this.serverHTTP, {
           cors: {
