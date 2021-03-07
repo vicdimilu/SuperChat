@@ -15,9 +15,12 @@ export class IOServer {
         //Server Express y API REST
         this.expressServer = ExpressServer.init(port);
         this.serverHTTP = http.createServer(this.expressServer.app);
+
+        let originURL:string = "http://127.0.0.1:"+port;
+
         this.app = new SocketIO.Server(this.serverHTTP, {
           cors: {
-            origin: "http://localhost:"+port,
+            origin: originURL,
             methods: ["GET", "POST"]
           }
         });
