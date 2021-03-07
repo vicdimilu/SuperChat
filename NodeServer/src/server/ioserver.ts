@@ -38,7 +38,7 @@ export class IOServer {
 
       this.app.on('connection', (socket) => {
         socket.on('chat message', (msg:string) => {
-          this.app.emit('chat message', msg);
+          this.app.emit('chat message', socket.id+": "+msg);
         });
       });
 
