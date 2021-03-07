@@ -17,7 +17,7 @@ export class IOServer {
         this.serverHTTP = http.createServer(this.expressServer.app);
         this.app = new SocketIO.Server(this.serverHTTP, {
           cors: {
-            origin: "http://localhost:3000",
+            origin: "http://localhost:"+port,
             methods: ["GET", "POST"]
           }
         });
@@ -26,7 +26,7 @@ export class IOServer {
     }
   
     start(){
-      this.serverHTTP.listen(this.port, () => console.log("listening on http://localhost:3000"));
+      this.serverHTTP.listen(this.port, () => console.log("listening on http://localhost:"+this.port));
     }
 
     init(){
