@@ -12,20 +12,20 @@ export class IOServer {
   
   
     constructor(private port : number){
-        //Server Express y API REST
-        this.expressServer = ExpressServer.init(port);
-        this.serverHTTP = http.createServer(this.expressServer.app);
+      //Server Express y API REST
+      this.expressServer = ExpressServer.init(port);
+      this.serverHTTP = http.createServer(this.expressServer.app);
 
-        let originURL:string = "*";
+      let originURL:string = "*";
 
-        this.app = new SocketIO.Server(this.serverHTTP, {
-          cors: {
-            origin: originURL,
-            methods: ["GET", "POST"]
-          }
-        });
-        this.protocol = new ProtocolCore();
-        this.init();
+      this.app = new SocketIO.Server(this.serverHTTP, {
+        cors: {
+          origin: originURL,
+          methods: ["GET", "POST"]
+        }
+      });
+      this.protocol = new ProtocolCore();
+      this.init();
     }
   
     start(){
@@ -37,7 +37,7 @@ export class IOServer {
       this.users = [];
 
       this.app.on('connection', (socket) => {
-        socket.on('chat message', (msg:string) => {
+        socket.on('general', (msg:string) => {
           this.app.emit('chat message', socket.id+": "+msg);
         });
       });

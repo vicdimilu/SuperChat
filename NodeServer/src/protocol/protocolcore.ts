@@ -12,8 +12,8 @@ export class ProtocolCore {
                 
                 break;
 
-            case '1x':
-
+            case '1x'://Servidor de chat
+                
                 break;
 
             default:
