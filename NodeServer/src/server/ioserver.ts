@@ -2,12 +2,13 @@ import { ExpressServer } from './express';
 import http = require('http');
 import SocketIO = require('socket.io');
 import { ProtocolCore } from '../protocol/protocolcore';
+import { User } from '../user/User';
 
 export class IOServer {
     private expressServer : ExpressServer; //express server
     private serverHTTP : http.Server;//apirest server
     private app: SocketIO.Server;
-    private users: Array<SocketIO.Socket>;
+    private users: Array<User>;
     private protocol: ProtocolCore;
   
   
@@ -37,9 +38,7 @@ export class IOServer {
       this.users = [];
 
       this.app.on('connection', (socket) => {
-        socket.on('general', (msg:string) => {
-          this.app.emit('chat message', socket.id+": "+msg);
-        });
+        this.users[socket.id] = new User(socket, this.app);
       });
 
     }
