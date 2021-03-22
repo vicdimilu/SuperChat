@@ -5,7 +5,7 @@ import * as React from "react"
 import { Heading, ChakraProvider, Box, VStack, Grid, theme} from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Chat } from "./components/chat/Chat";
-
+import { Helmet } from "react-helmet";
 /*SEND MESSAGES
    socket.emit('chat message', "hola");
 
@@ -22,6 +22,9 @@ import { Chat } from "./components/chat/Chat";
 
 export const App = () => (
     <ChakraProvider theme={theme}>
+        <Helmet>
+            <title>Super Chat</title>
+        </Helmet>
         <Box textAlign="center" fontSize="xl">
             <Grid minH="100vh" p={3}>
                 <ColorModeSwitcher justifySelf="flex-end" />

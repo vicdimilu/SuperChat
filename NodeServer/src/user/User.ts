@@ -1,4 +1,5 @@
 import SocketIO = require('socket.io');
+import { UserPacket } from './UserPacket.struct';
 
 export class User {
     nick: string;
@@ -14,20 +15,21 @@ export class User {
 
     init(){
 
-        //Join to server
-        this.socket.on("0x00",(msg: string) => {
+        //Join to server how anonymous
+        this.socket.on(UserPacket.Anonymous,(msg: string) => {
             this.nick = msg;
+            this.socket.emit(UserPacket.Anonymous, true);
         });
 
         //Recibe mensaje chat general
-        this.socket.on("1x00",(msg: string) => {
-            this.app.emit("1x00", this.nick+": "+msg)
+        this.socket.on(UserPacket.GeneralChatMessage,(msg: string) => {
+            this.app.emit(UserPacket.GeneralChatMessage, this.nick+": "+msg)
         });
 
         //Recibe mensaje privado
-        this.socket.on("1x01", (anotherSocketId: any, msg: string) => {
-            this.socket.to(anotherSocketId).emit("1x01", this.socket.id, this.nick+": "+msg);
-            this.socket.emit("1x01", this.nick+": "+msg);
+        this.socket.on(UserPacket.PrivateChatMessage, (anotherSocketId: any, msg: string) => {
+            this.socket.to(anotherSocketId).emit(UserPacket.PrivateChatMessage, this.socket.id, this.nick+": "+msg);
+            this.socket.emit(UserPacket.PrivateChatMessage, this.nick+": "+msg);
         });
     }
 }
