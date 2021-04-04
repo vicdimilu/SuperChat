@@ -1,21 +1,20 @@
 import * as React from "react";
 import { Flex } from "@chakra-ui/react";
+import { Message } from '../Msg';
 
-export class MessageList extends React.Component<any> {
-
-    messages: Array<string> = [];
-
-    constructor(props: any){
-        super(props);
-        this.messages = props.messages;
-    }
+export class MessageList extends React.Component<{messages: [any]}, {}> {
 
     render() {
-        const listMessages = this.messages.map( (msg, index)=> 
-            <Flex direction="column" border="1px" borderColor="gray.200" key={index}>{msg}</Flex>
-        );
-
-        return listMessages;
+        const messageList: any = 
+            <Flex 
+                direction="column" 
+                fontFamily="raleway"
+            > 
+                {this.props.messages.map(m => {
+                    return <Message message={m}/>
+                })}
+            </Flex>
+            return messageList;
     }
 
 }

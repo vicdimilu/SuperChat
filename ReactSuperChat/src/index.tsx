@@ -4,6 +4,9 @@ import ReactDOM from "react-dom"
 import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
+import "@fontsource/raleway/400.css"
+import "@fontsource/indie-flower/400.css"
+import "@fontsource/fredoka-one/400.css"
 
 
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 //import { Textarea, Flex, Container, Heading, ChakraProvider, Box, Text, Link, VStack, Stack, Code, Grid, theme, Input, FormControl, FormLabel, FormErrorMessage, FormHelperText, Button, ButtonGroup} from "@chakra-ui/react";
-import { Flex, Box, Stack, Input, FormLabel, Button } from "@chakra-ui/react";
+import { Flex, Box, Stack, Input, Button } from "@chakra-ui/react";
 import { io } from "socket.io-client";
 import { ChatLibrary } from './State.Interface';
 import { AnonymousForm } from '../forms/AnonymousForm';
@@ -10,14 +10,8 @@ export class Chat extends React.Component<any> {
 
     messages: any = [];
     nick: string = "Ex: Lucas";
-    message: string = "Write Msg to Send";
     url: string = "http://127.0.0.1:5000";
     socket:any = io(this.url);
-    //const socket: any = io(url, { autoConnect : false });
-    /*socket.onAny((event: any, ...args: any) => {
-      console.log(event, args);
-      console.log("socket onAny");
-    });*/
     constructor(props: any) {
         super(props);
         this.state = {
@@ -32,9 +26,10 @@ export class Chat extends React.Component<any> {
 
     componentDidMount(){
         //activate messages receptor
-        this.socket.on(ChatLibrary.GeneralChatMessage, (msg: any) => {
-            this.messages.push(<p> { msg } </p>);
-            this.setState({});//probar con this.render()
+        this.socket.on(ChatLibrary.GeneralChatMessage, (message: string) => {
+            this.messages.push(message);
+            // We use an empty etState to rerender the component
+            this.setState({});
         });
         //Login Receptor
         this.socket.on(ChatLibrary.Anonymous, (packet: boolean) => {
@@ -49,22 +44,21 @@ export class Chat extends React.Component<any> {
     }
 
     componentWillUnmount(){
-        this.socket.disconnect();//revisar
+        this.socket.disconnect();
     }
 
-    //Exit METHOD
     handleExitChat() {
         this.updateState({value: 'Joining'});
-        this.props.socket.disconnect();
+        this.socket.disconnect();
     }
 
     //Send Message METHOD
     handleSendMessage(event: any) {
         event.preventDefault();
+        const MSGForm: HTMLFormElement = event.target;
         //capturamos mensaje a enviar
-        this.message = (document.getElementById('msg') as HTMLInputElement).value;
-        (document.getElementById('msg') as HTMLInputElement).value = "";
-        this.socket.emit(ChatLibrary.GeneralChatMessage, this.message);
+        this.socket.emit(ChatLibrary.GeneralChatMessage, MSGForm.MSGInput.value);
+        MSGForm.MSGInput.value = "";
     }
 
     updateState(value:any){
@@ -76,21 +70,77 @@ export class Chat extends React.Component<any> {
         // @ts-ignore
         if (this.state.value === 'Joining') {
             return (
+                // This should be an "EntryForm" that ask for either 
+                // a nickname (as an anonymous user) or login credentials (registered user)
                 <AnonymousForm userSocket={this.socket}/>
             )
         }
         else {
             return (
-                <Box>
-                    <Stack spacing={8}>
-                        <MessageList messages={this.messages}/>
-                        <Flex>
-                            <FormLabel>Message</FormLabel>
-                            <Input name="msg" id="msg" type="text" size="xs" placeholder="write message to send"/>
-                            <Button  type="submit" size="xs" onClick={this.handleSendMessage}>Send</Button>
+                <Box 
+                    w="75%" 
+                    h="75vh" 
+                    border="solid 1px gray"
+                    rounded="lg"
+                >
+                    <Stack 
+                        h="100%"
+                        w="100%"
+                        direction="column"
+                        justify="space-between" 
+                        spacing={0}
+                    >
+                        <MessageList 
+                            messages={this.messages} 
+                        />
+                        <Flex 
+                            h="10%" 
+                            align="center"
+                        >
+                            <form 
+                                style={{width: "100%", padding: "2%"}} 
+                                onSubmit={this.handleSendMessage}
+                            >
+                                <Flex align="center">
+                                    <Input 
+                                        variant="flushed"
+                                        name="MSGInput" 
+                                        id="MSGInput" 
+                                        type="text" 
+                                        size="xs" 
+                                        w="90%"
+                                        placeholder="Type here to message others."
+                                        mr="1"
+                                    />
+                                    <Button  
+                                        variant="outline"
+                                        fontFamily="Indie Flower"
+                                        w="10%"
+                                        rounded="md"
+                                        type="submit" 
+                                        size="xs"
+                                    >
+                                        Send
+                                    </Button>
+                                </Flex>
+                            </form>
+                            <Flex 
+                                align="center" 
+                                h="10%" 
+                                p="2"
+                            >
+                                <Button
+                                    fontFamily="Indie Flower"
+                                    variant="outline"
+                                    type="submit" 
+                                    rounded="md"
+                                    onClick={this.handleExitChat}
+                                >
+                                    Exit Chat
+                                </Button>
+                            </Flex>
                         </Flex>
                     </Stack>
-                    <Button  type="submit" isFullWidth={true} onClick={this.handleExitChat}>Exit Chat</Button>
                 </Box>
             );
         }
