@@ -1,59 +1,62 @@
 import * as React from "react";
-import { Flex, Stack, Input, FormControl, FormLabel, Button } from "@chakra-ui/react";
+import {
+  Flex,
+  Stack,
+  Input,
+  FormControl,
+  FormLabel,
+  Button,
+} from "@chakra-ui/react";
 import { ChatLibrary } from "../chat/State.Interface";
 
 export class AnonymousForm extends React.Component<any> {
+  private socket: any = null;
 
-    private socket: any = null;
-    //private nick: string = "";
+  constructor(props: any) {
+    super(props);
+    this.socket = props.userSocket;
+    this.handleJoin = this.handleJoin.bind(this);
+  }
 
-    constructor(props: any){
-        super(props);
-        this.socket = props.userSocket;
-        this.handleJoin = this.handleJoin.bind(this);
-        //this.handleOnChange = this.handleOnChange.bind(this);
-    }
+  handleJoin(event: any) {
+    event.preventDefault();
+    console.log(event.target.name);
+    this.socket.emit(ChatLibrary.Anonymous, event.target.name.value);
+  }
 
-    handleJoin(event: any){
-        event.preventDefault();
-        console.log(event.target.nick);
-        this.socket.emit(ChatLibrary.Anonymous, event.target.name.value);
-        //console.log("AnonymousForm: <handleJoin> " + this.nick);
-    }
-
-    //handleOnChange(event: any){
-        //this.nick = event.target.value;
-        //console.log("AnonymousForm: <handleOnCHange> " + this.nick);
-    //}
-
-    render(){
-        return (
-            <form onSubmit={this.handleJoin}>
-                <FormControl isRequired>
-                    <Stack>
-                        <Flex>
-                            <FormLabel mr="1" mb="0">Name</FormLabel>
-                            <Input 
-                                variant="flushed"
-                                name="name" 
-                                id="name" 
-                                type="text" 
-                                size="xs" 
-                                placeholder=""
-                                //onChange={this.handleOnChange}
-                            />
-                        </Flex>
-                        <Button  
-                            fontFamily="Indie Flower"
-                            variant="outline"
-                            type="submit" 
-                            size="md"
-                        >
-                            Join Chat
-                        </Button>
-                    </Stack>
-                </FormControl>
-            </form>
-        );
-    };
+  render() {
+    return (
+      <Flex bgColor="white" p="5" boxShadow="md" rounded="md">
+        <form onSubmit={this.handleJoin}>
+          <FormControl isRequired>
+            <Stack>
+              <Flex>
+                <FormLabel mr="1" mb="0">
+                  Name
+                </FormLabel>
+                <Input
+                  variant="flushed"
+                  name="name"
+                  id="name"
+                  type="text"
+                  size="xs"
+                  placeholder=""
+                />
+              </Flex>
+              <Button
+                fontFamily="Indie Flower"
+                variant="outline"
+                type="submit"
+                size="md"
+                bgColor="gray.700"
+                color="white"
+              >
+                Join Chat
+              </Button>
+            </Stack>
+          </FormControl>
+        </form>
+      </Flex>
+    );
+  }
 }

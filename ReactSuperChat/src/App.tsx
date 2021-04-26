@@ -1,12 +1,10 @@
-import * as React from "react"
-//import { Logo } from "./Logo"
-//import { BsFillPersonLinesFill } from 'react-icons/bs';
-//import { Textarea, Flex, Container, Heading, ChakraProvider, Box, Text, Link, VStack, Stack, Code, Grid, theme, Input, FormControl, FormLabel, FormErrorMessage, FormHelperText, Button, ButtonGroup} from "@chakra-ui/react"
-import { extendTheme, Heading, ChakraProvider, Box, VStack, Flex, theme} from "@chakra-ui/react"
-import { mode } from '@chakra-ui/theme-tools';
+import * as React from "react";
+import { extendTheme, Heading, ChakraProvider, Flex } from "@chakra-ui/react";
+import { mode } from "@chakra-ui/theme-tools";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Chat } from "./components/chat/Chat";
 import { Helmet } from "react-helmet";
+import "emoji-mart/css/emoji-mart.css";
 
 /*SEND MESSAGES
    socket.emit('chat message', "hola");
@@ -22,50 +20,39 @@ import { Helmet } from "react-helmet";
    })
  */
 
-export const App = () => (
-    <ChakraProvider
+export class App extends React.Component<any, any> {
+  render() {
+    return (
+      <ChakraProvider
         theme={extendTheme({
-            fonts: {
-                heading:"Fredoka One",
-                body: "Raleway",
-                flex: "Raleway",
-                button: "Indie Flower",
-            },
-            styles: {
-                global: (props: any) => ({
-                    body: {
-                        bg: mode('#ffe', 'gray.800')(props),
-                    },
-                }),
-            },
+          fonts: {
+            heading: "Fredoka One",
+            body: "Raleway",
+            flex: "Raleway",
+            button: "Indie Flower",
+          },
+          styles: {
+            global: (props: any) => ({
+              body: {
+                bg: mode("gray.100", "#333")(props),
+              },
+            }),
+          },
         })}
-    >
-        <Helmet
-            title="Super Chat"
-        />
-        <Flex
-            justify="flex-end"
-            align="center"
-            h="10vh"
-        >
-            <ColorModeSwitcher
-                m="0"
-                p="0"
-            />
+      >
+        <Helmet title="Super Chat" />
+        <Flex position="absolute" top="1" right="1">
+          <ColorModeSwitcher m="0" p="0" />
         </Flex>
-        <Flex
-            align="center"
-            direction="column"
-            justify="center"
-            h="90vh"
-        >
-            <Heading
-                fontFamily="Fredoka One"
-                as="h1"
-            >
-                SuperChat
+        <Flex align="center" direction="column" justify="center" h="100vh">
+          <Flex h="25%" justify="center">
+            <Heading textAlign="center" fontFamily="Fredoka One" as="h1">
+              SuperChat
             </Heading>
-            <Chat/>
+          </Flex>
+          <Chat />
         </Flex>
-    </ChakraProvider>
-)
+      </ChakraProvider>
+    );
+  }
+}
