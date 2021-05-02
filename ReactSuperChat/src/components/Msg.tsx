@@ -10,8 +10,9 @@ export class Message extends React.Component<{ message: string }, {}> {
         color="gray.700"
         fontSize="xs"
         pl="2"
-        borderBottom="solid 1px gray"
-        rounded="md"
+        borderBottom="solid 1px #BBB"
+        borderBottomStyle="dashed"
+        rounded="sm"
       >
         {this.props.message}
       </Flex>

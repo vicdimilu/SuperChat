@@ -13,6 +13,7 @@ import { ChatLibrary } from "./State.Interface";
 import { AnonymousForm } from "../forms/AnonymousForm";
 import { MessageList } from "./MessageList";
 import { Picker, Emoji } from "emoji-mart";
+import { FaSmileWink } from "react-icons/fa";
 
 export class Chat extends React.Component<any, any> {
   messages: any = [];
@@ -86,7 +87,7 @@ export class Chat extends React.Component<any, any> {
     return undefined;
   }
   render() {
-    if (this.state.value === "Joining") {
+    if (this.state.value !== "Joining") {
       return (
         // This should be an "EntryForm" that ask for either
         // a nickname (as an anonymous user) or login credentials (registered user)
@@ -100,7 +101,7 @@ export class Chat extends React.Component<any, any> {
           justify="center"
           align="center"
           bgColor="white"
-          border="solid 1px gray"
+          boxShadow="md"
           rounded="lg"
         >
           <Stack
@@ -116,7 +117,7 @@ export class Chat extends React.Component<any, any> {
                 style={{ width: "100%", padding: "2%" }}
                 onSubmit={this.handleSendMessage}
               >
-                <Flex align="center">
+                <Flex w="100%" align="center">
                   <InputGroup size="md">
                     <Input
                       variant="flushed"
@@ -124,59 +125,63 @@ export class Chat extends React.Component<any, any> {
                       id="MSGInput"
                       type="text"
                       size="xs"
-                      w="90%"
                       placeholder="Type here to message others."
                       mr="1"
                     />
                     <InputRightElement position="relative" width="4.5rem">
-                      <Flex
-                        borderColor="blue"
-                        display={this.state.pickerVisibility}
-                        bottom="100"
-                        position="absolute"
-                        as="span"
-                      >
-                        <Picker
-                          set="google"
-                          title=""
-                          emoji=""
-                          showSkinTones={false}
-                          showPreview={false}
-                          onClick={undefined}
-                        />
+                      <Flex w="80%" justify="space-between">
+                        <Flex
+                          borderColor="blue"
+                          display={this.state.pickerVisibility}
+                          bottom="100"
+                          position="absolute"
+                          as="span"
+                        >
+                          <Picker
+                            set="google"
+                            title=""
+                            emoji=""
+                            showSkinTones={false}
+                            showPreview={false}
+                            onClick={undefined}
+                          />
+                        </Flex>
+                        <Button
+                          h="1.75rem"
+                          color="black"
+                          size="sm"
+                          onClick={this.showEmojiPicker}
+                        >
+                          <FaSmileWink />
+                        </Button>
                       </Flex>
-                      <Button
-                        h="1.75rem"
-                        bgColor="red"
-                        size="sm"
-                        onClick={this.showEmojiPicker}
-                        value="ASD"
-                      />
                     </InputRightElement>
                   </InputGroup>
-                  <Button
-                    variant="outline"
-                    fontFamily="Indie Flower"
-                    w="10%"
-                    rounded="md"
-                    type="submit"
-                    size="xs"
-                  >
-                    Send
-                  </Button>
+                  <Flex w="20%" justify="space-between">
+                    <Button
+                      variant="outline"
+                      fontFamily="Indie Flower"
+                      boxShadow="md"
+                      rounded="md"
+                      type="submit"
+                      size="xs"
+                    >
+                      Send
+                    </Button>
+                    <Button
+                      size="xs"
+                      fontFamily="Indie Flower"
+                      variant="outline"
+                      type="submit"
+                      rounded="md"
+                      onClick={this.handleExitChat}
+                      boxShadow="md"
+                    >
+                      Exit Chat
+                    </Button>
+                  </Flex>
                 </Flex>
               </form>
-              <Flex align="center" h="10%" p="2">
-                <Button
-                  fontFamily="Indie Flower"
-                  variant="outline"
-                  type="submit"
-                  rounded="md"
-                  onClick={this.handleExitChat}
-                >
-                  Exit Chat
-                </Button>
-              </Flex>
             </Flex>
           </Stack>
         </Flex>

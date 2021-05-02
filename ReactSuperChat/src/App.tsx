@@ -45,11 +45,17 @@ export class App extends React.Component<any, any> {
           <ColorModeSwitcher m="0" p="0" />
         </Flex>
         <Flex align="center" direction="column" justify="center" h="100vh">
-          <Flex h="25%" justify="center">
-            <Heading textAlign="center" fontFamily="Fredoka One" as="h1">
-              SuperChat
-            </Heading>
-          </Flex>
+          <Heading
+            position="fixed"
+            top="0"
+            w="100%"
+            m="2"
+            textAlign="center"
+            fontFamily="Fredoka One"
+            as="h1"
+          >
+            SuperChat
+          </Heading>
           <Chat />
         </Flex>
       </ChakraProvider>
