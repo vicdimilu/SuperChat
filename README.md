@@ -1,13 +1,17 @@
-# SuperChat 
-Sitio Web de Salas de Chat 
+# SuperChat - W.I.P
+A Chat WebApp
 
-Proyecto se separará en dos:
-1. Frontend basado en React + websocket.
-2. Backend basado en NodeJS + ExpressJS + websocket.
+## General
+### Description
+SuperChat offers its users a simple, free of cost, an online modern chat interface with image and emoji support for
+both public and private messages
 
-Base proyecto en REACT: [LINK](https://www.newline.co/fullstack-react/articles/using-create-react-app-with-a-server/)
-Base Semántica de Versiones: [LINK](https://semver.org/lang/es/)
+### Technology Stack
+- React
+- Socket.io
+- TailwindCss
+- ChakraUi
+- Framer
 
-## Authors
+### Mantainer
 Ellie Sacchi Van Broock
-Diego López Almerasdeolmiera

@@ -1,1 +1,0 @@
-{"version":3,"file":"protocolcore.js","sourceRoot":"","sources":["../../src/protocol/protocolcore.ts"],"names":[],"mappings":";;;AAGA;IAEI;IACA,CAAC;IAED,kCAAW,GAAX,UAAY,OAAsB;QAC9B,QAAQ,OAAO,CAAC,IAAI,CAAC,SAAS,CAAC,CAAC,EAAC,CAAC,CAAC,EAAE;YACjC,KAAK,IAAI;gBAEL,MAAM;YAEV,KAAK,IAAI;gBAEL,MAAM;YAEV;gBACI,MAAM;SACb;IACL,CAAC;IACL,mBAAC;AAAD,CAAC,AAnBD,IAmBC;AAnBY,oCAAY"}

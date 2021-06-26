@@ -1,19 +1,8 @@
 import * as React from "react";
-//import { Textarea, Flex, Container, Heading, ChakraProvider, Box, Text, Link, VStack, Stack, Code, Grid, theme, Input, FormControl, FormLabel, FormErrorMessage, FormHelperText, Button, ButtonGroup} from "@chakra-ui/react";
-import {
-  Flex,
-  InputRightElement,
-  InputGroup,
-  Stack,
-  Input,
-  Button,
-} from "@chakra-ui/react";
+import { Flex, InputGroup, Stack, Input, Button } from "@chakra-ui/react";
 import { io } from "socket.io-client";
 import { ChatLibrary } from "./State.Interface";
-import { AnonymousForm } from "../forms/AnonymousForm";
 import { MessageList } from "./MessageList";
-import { Picker, Emoji } from "emoji-mart";
-import { FaSmileWink } from "react-icons/fa";
 
 export class Chat extends React.Component<any, any> {
   messages: any = [];
@@ -27,19 +16,19 @@ export class Chat extends React.Component<any, any> {
       msgCount: 0,
       userSocket: null,
       pickerVisibility: "none",
+      userName: "AnonymousUser",
     };
     //Init Functions
     this.handleExitChat = this.handleExitChat.bind(this);
     this.handleSendMessage = this.handleSendMessage.bind(this);
-    this.addEmoji = this.addEmoji.bind(this);
-    this.showEmojiPicker = this.showEmojiPicker.bind(this);
   }
 
   componentDidMount() {
+    this.socket.emit(ChatLibrary.Anonymous, this.state.userName);
     //activate messages receptor
     this.socket.on(ChatLibrary.GeneralChatMessage, (message: string) => {
       this.messages.push(message);
-      // We use an empty etState to rerender the component
+      // We use an empty setState to rerender the component
       this.setState({});
     });
     //Login Receptor
@@ -77,115 +66,63 @@ export class Chat extends React.Component<any, any> {
     console.log("UPDATE STATE: ", this.state);
   }
 
-  addEmoji(emojiObj: any) {}
-  showEmojiPicker() {
-    const visibilityValue: string =
-      this.state.pickerVisibility === "none" ? "auto" : "none";
-    this.setState({
-      pickerVisibility: visibilityValue,
-    });
-    return undefined;
+  handleJoin(event: any) {
+    event.preventDefault();
   }
   render() {
-    if (this.state.value !== "Joining") {
-      return (
-        // This should be an "EntryForm" that ask for either
-        // a nickname (as an anonymous user) or login credentials (registered user)
-        <AnonymousForm userSocket={this.socket} />
-      );
-    } else {
-      return (
-        <Flex
-          w="75%"
-          h="50%"
-          justify="center"
-          align="center"
-          bgColor="white"
-          boxShadow="md"
-          rounded="lg"
+    return (
+      <Flex
+        w="95%"
+        h="95%"
+        justify="center"
+        align="center"
+        bgColor="white"
+        boxShadow="md"
+        rounded="lg"
+      >
+        <Stack
+          h="100%"
+          w="100%"
+          direction="column"
+          justify="space-between"
+          spacing={0}
         >
-          <Stack
-            h="100%"
-            w="100%"
-            direction="column"
-            justify="space-between"
-            spacing={0}
+          <MessageList messages={this.messages} />
+          <Flex
+            h="10%"
+            justify="center"
+            backgroundColor="gray.700"
+            align="center"
           >
-            <MessageList messages={this.messages} />
-            <Flex h="10%" align="center">
-              <form
-                style={{ width: "100%", padding: "2%" }}
-                onSubmit={this.handleSendMessage}
-              >
-                <Flex w="100%" align="center">
-                  <InputGroup size="md">
-                    <Input
-                      variant="flushed"
-                      name="MSGInput"
-                      id="MSGInput"
-                      type="text"
-                      size="xs"
-                      placeholder="Type here to message others."
-                      mr="1"
-                    />
-                    <InputRightElement position="relative" width="4.5rem">
-                      <Flex w="80%" justify="space-between">
-                        <Flex
-                          borderColor="blue"
-                          display={this.state.pickerVisibility}
-                          bottom="100"
-                          position="absolute"
-                          as="span"
-                        >
-                          <Picker
-                            set="google"
-                            title=""
-                            emoji=""
-                            showSkinTones={false}
-                            showPreview={false}
-                            onClick={undefined}
-                          />
-                        </Flex>
-                        <Button
-                          h="1.75rem"
-                          color="black"
-                          size="sm"
-                          onClick={this.showEmojiPicker}
-                        >
-                          <FaSmileWink />
-                        </Button>
-                      </Flex>
-                    </InputRightElement>
-                  </InputGroup>
-                  <Flex w="20%" justify="space-between">
-                    <Button
-                      variant="outline"
-                      fontFamily="Indie Flower"
-                      boxShadow="md"
-                      rounded="md"
-                      type="submit"
-                      size="xs"
-                    >
-                      Send
-                    </Button>
-                    <Button
-                      size="xs"
-                      fontFamily="Indie Flower"
-                      variant="outline"
-                      type="submit"
-                      rounded="md"
-                      onClick={this.handleExitChat}
-                      boxShadow="md"
-                    >
-                      Exit Chat
-                    </Button>
-                  </Flex>
-                </Flex>
-              </form>
-            </Flex>
-          </Stack>
-        </Flex>
-      );
-    }
+            <form onSubmit={this.handleSendMessage}>
+              <Flex w="100%" align="center">
+                <Flex
+                  fontSize={{ base: "10px", md: "12px" }}
+                  children={this.state.userName}
+                />
+                <Input
+                  _placeholder={{ color: "white" }}
+                  variant="flushed"
+                  name="MSGInput"
+                  id="MSGInput"
+                  type="text"
+                  size="md"
+                  placeholder="Type here to message others."
+                  mr="1"
+                />
+                <Button
+                  variant="outline"
+                  fontFamily="Indie Flower"
+                  rounded="md"
+                  type="submit"
+                  size="md"
+                  children={"Send"}
+                />
+              </Flex>
+            </form>
+          </Flex>
+        </Stack>
+      </Flex>
+    );
   }
 }
