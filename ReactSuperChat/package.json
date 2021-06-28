@@ -7,6 +7,7 @@
     "@craco/craco": "^6.1.2",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
+    "@fontsource/fredoka-one": "^4.4.5",
     "@fontsource/indie-flower": "^4.2.2",
     "@fontsource/raleway": "^4.2.2",
     "@testing-library/jest-dom": "^5.11.9",
@@ -34,9 +35,9 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-   "start": "craco start",
-     "build": "craco build",
-     "test": "craco test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

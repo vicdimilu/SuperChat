@@ -3,6 +3,7 @@ import { extendTheme, Heading, ChakraProvider, Flex } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import { Chat } from "./components/chat/Chat";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { ChatMenu } from "./components/ChatMenu";
 import "emoji-mart/css/emoji-mart.css";
 type AppProps = {
   children: any;
@@ -36,7 +37,8 @@ export const App = ({ children = null }: AppProps) => {
     >
       <HelmetProvider>
         <Helmet title="Super Chat" />
-        <Flex align="center" justify="center" h="100vh">
+        <Flex align="center" direction="column" justify="center" h="100vh">
+          <ChatMenu />
           <Chat orientation={getScreenOrientation()} />
         </Flex>
       </HelmetProvider>
