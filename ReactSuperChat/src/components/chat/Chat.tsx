@@ -1,9 +1,11 @@
 import * as React from "react";
-import { Flex, Stack, Input, Button } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
+
 import { io } from "socket.io-client";
 import { ChatLibrary } from "./State.Interface";
-import { MessageList } from "./MessageList";
+import { ChatMessages } from "./MessageList";
 import { EScreenOrientation } from "../../App";
+import { ChatControls } from "../chat/ChatControls";
 
 interface ChatProps {
   orientation: EScreenOrientation;
@@ -37,13 +39,14 @@ export const Chat = ({ orientation }: ChatProps) => {
   return (
     <Flex
       w="95%"
-      h="95%"
+      h="94.5%"
       justify="center"
       align="center"
       bgColor="white"
       boxShadow="md"
       rounded="lg"
       color="white"
+      mb="2.5vw"
     >
       <Stack
         h="100%"
@@ -52,40 +55,8 @@ export const Chat = ({ orientation }: ChatProps) => {
         justify="space-between"
         spacing={0}
       >
-        <MessageList messages={messages} />
-        <Flex
-          h="10%"
-          justify="center"
-          backgroundColor="gray.700"
-          align="center"
-        >
-          <form onSubmit={handleSendMessage}>
-            <Flex w="100%" align="center">
-              <Flex
-                fontSize={{ base: "10px", md: "12px" }}
-                children={userName}
-              />
-              <Input
-                _placeholder={{ color: "white" }}
-                variant="flushed"
-                name="MSGInput"
-                id="MSGInput"
-                type="text"
-                size="md"
-                placeholder="Type here to message others."
-                mr="1"
-              />
-              <Button
-                variant="outline"
-                fontFamily="Indie Flower"
-                rounded="md"
-                type="submit"
-                size="md"
-                children={"Send"}
-              />
-            </Flex>
-          </form>
-        </Flex>
+        <ChatMessages messages={messages} />
+        <ChatControls handleSendMessage={handleSendMessage} />
       </Stack>
     </Flex>
   );

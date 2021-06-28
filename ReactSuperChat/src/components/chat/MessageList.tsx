@@ -2,7 +2,7 @@ import * as React from "react";
 import { Flex } from "@chakra-ui/react";
 import { Message } from "../Msg";
 
-export class MessageList extends React.Component<{ messages: any[] }, {}> {
+export class ChatMessages extends React.Component<{ messages: any[] }, {}> {
   render() {
     const messageList: any = (
       <Flex direction="column" fontFamily="raleway">
