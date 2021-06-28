@@ -1,18 +1,11 @@
 import * as React from "react";
-import {
-  Flex,
-  Stack,
-  Input,
-  Button,
-  InputGroup,
-  InputRightAddon,
-} from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 
 import { io } from "socket.io-client";
 import { ChatLibrary } from "./State.Interface";
-import { MessageList } from "./MessageList";
+import { ChatMessages } from "./MessageList";
 import { EScreenOrientation } from "../../App";
-import { GrEmoji } from "react-icons/gr";
+import { ChatControls } from "../chat/ChatControls";
 
 interface ChatProps {
   orientation: EScreenOrientation;
@@ -46,13 +39,14 @@ export const Chat = ({ orientation }: ChatProps) => {
   return (
     <Flex
       w="95%"
-      h="95%"
+      h="94.5%"
       justify="center"
       align="center"
       bgColor="white"
       boxShadow="md"
       rounded="lg"
       color="white"
+      mb="2.5vw"
     >
       <Stack
         h="100%"
@@ -61,45 +55,8 @@ export const Chat = ({ orientation }: ChatProps) => {
         justify="space-between"
         spacing={0}
       >
-        <MessageList messages={messages} />
-        <Flex
-          h="10%"
-          width="100%"
-          justify="center"
-          backgroundColor="gray.700"
-          align="center"
-        >
-          <form style={{ width: "100%" }} onSubmit={handleSendMessage}>
-            <Flex w="100%" p="1" align="center">
-              <InputGroup size="xs">
-                <Input
-                  _placeholder={{ color: "white" }}
-                  variant="flushed"
-                  name="MSGInput"
-                  id="MSGInput"
-                  type="text"
-                  width="100%"
-                  placeholder="Type here to message others."
-                  mr="1"
-                />
-                <InputRightAddon
-                  bgColor="transparent"
-                  color="inherit"
-                  border="none"
-                  children={<GrEmoji color="white" size="24" />}
-                  onClick={() => alert("works")}
-                />
-                <Button
-                  variant="outline"
-                  fontFamily="Indie Flower"
-                  rounded="md"
-                  type="submit"
-                  children={"Send"}
-                />
-              </InputGroup>
-            </Flex>
-          </form>
-        </Flex>
+        <ChatMessages messages={messages} />
+        <ChatControls handleSendMessage={handleSendMessage} />
       </Stack>
     </Flex>
   );

@@ -37,7 +37,13 @@ export const App = ({ children = null }: AppProps) => {
     >
       <HelmetProvider>
         <Helmet title="Super Chat" />
-        <Flex align="center" direction="column" justify="center" h="100vh">
+        <Flex
+          w="100%"
+          align="center"
+          direction="column"
+          justify="center"
+          h="100vh"
+        >
           <ChatMenu />
           <Chat orientation={getScreenOrientation()} />
         </Flex>
