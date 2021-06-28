@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^1.3.4",
+    "@craco/craco": "^6.1.2",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
+    "@fontsource/fredoka-one": "^4.4.5",
     "@fontsource/indie-flower": "^4.2.2",
     "@fontsource/raleway": "^4.2.2",
     "@testing-library/jest-dom": "^5.11.9",
@@ -25,7 +27,7 @@
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^1.0.9",
     "react-icons": "^3.11.0",
     "react-scripts": "4.0.3",
     "socket.io-client": "^4.0.0",
@@ -52,5 +54,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.36",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }
