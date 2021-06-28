@@ -7,6 +7,8 @@ import * as serviceWorker from "./serviceWorker"
 import "@fontsource/raleway/400.css"
 import "@fontsource/indie-flower/400.css"
 import "@fontsource/fredoka-one/400.css"
+import './index.css';
+
 
 
 
