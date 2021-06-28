@@ -1,13 +1,13 @@
 import SocketIO = require('socket.io');
-import { UserPacket } from './UserPacket.struct';
+import { UserPacketBase, UserSendMessagePacket, UserCreateRoomPacket, UserAddOtherUserToRoom, UserPacket } from './UserPacket.struct';
 
 export class User {
-    nick: string;
+    username: string;
     private socket: any;
     private app: SocketIO.Server;
 
     constructor(socket:any, app: SocketIO.Server){
-        this.nick = "";
+        this.username = "";
         this.socket = socket;
         this.app = app;
         this.init();
@@ -17,19 +17,20 @@ export class User {
 
         //Join to server how anonymous
         this.socket.on(UserPacket.Anonymous,(msg: string) => {
-            this.nick = msg;
+            let recv_message:UserPacketBase = JSON.parse(msg);
+            this.username = "Anonymous#";
             this.socket.emit(UserPacket.Anonymous, true);
         });
 
-        //Recibe mensaje chat general
-        this.socket.on(UserPacket.GeneralChatMessage,(msg: string) => {
-            this.app.emit(UserPacket.GeneralChatMessage, this.nick+": "+msg)
+        //Recibe peticion SuperChat
+        this.socket.on(UserPacket.SuperChat,(msg: string) => {
+            this.app.emit(UserPacket.SuperChat, msg)
         });
 
         //Recibe mensaje privado
-        this.socket.on(UserPacket.PrivateChatMessage, (anotherSocketId: any, msg: string) => {
-            this.socket.to(anotherSocketId).emit(UserPacket.PrivateChatMessage, this.socket.id, this.nick+": "+msg);
-            this.socket.emit(UserPacket.PrivateChatMessage, this.nick+": "+msg);
-        });
+        /*this.socket.on(UserPacket.PrivateChatMessage, (anotherSocketId: any, msg: string) => {
+            this.socket.to(anotherSocketId).emit(UserPacket.PrivateChatMessage, this.socket.id, this.username+": "+msg);
+            this.socket.emit(UserPacket.PrivateChatMessage, this.username+": "+msg);
+        });*/
     }
 }
