@@ -1,9 +1,11 @@
 import * as React from "react";
-import { extendTheme, Heading, ChakraProvider, Flex } from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, Flex } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import { Chat } from "./components/chat/Chat";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChatMenu } from "./components/ChatMenu";
+import { ChatRoomsControl } from "./components/chat/ChatRoomsControl";
+import { ChatPrivateChatsControl } from "./components/chat/ChatPrivateChatsControl";
 import "emoji-mart/css/emoji-mart.css";
 type AppProps = {
   children: any;
@@ -45,6 +47,20 @@ export const App = ({ children = null }: AppProps) => {
           h="100vh"
         >
           <ChatMenu />
+          <Flex
+            w="95%"
+            justify="center"
+            align="center"
+            color="white"
+            mb="1vw"
+            mt="1vw"
+            children={
+              <>
+                <ChatRoomsControl />
+                <ChatPrivateChatsControl />
+              </>
+            }
+          />
           <Chat orientation={getScreenOrientation()} />
         </Flex>
       </HelmetProvider>

@@ -54,12 +54,6 @@ export const ChatMenu = ({
             children={"Register or Login"}
           />
         )}
-        <MenuItem
-          w="90%"
-          icon={<BsHouse size={iconSize} />}
-          className="whitespace-pre"
-          children={`Rooms\nCurrent: ${currentRoom} (Users: ${roomUsersNumber})`}
-        />
       </MenuList>
     </Menu>
   );
