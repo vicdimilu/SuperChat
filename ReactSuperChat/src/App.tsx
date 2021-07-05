@@ -1,5 +1,5 @@
 import * as React from "react";
-import { extendTheme, Heading, ChakraProvider, Flex } from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, Flex } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import { Chat } from "./components/chat/Chat";
 import { Helmet, HelmetProvider } from "react-helmet-async";

@@ -7,7 +7,7 @@ import {
   FormLabel,
   Button,
 } from "@chakra-ui/react";
-import { ChatLibrary } from "../chat/State.Interface";
+import { ChatAPI, ChatLibrary, UserPacketBase } from "../chat/State.Interface";
 
 export class AnonymousForm extends React.Component<any> {
   private socket: any = null;
@@ -21,7 +21,10 @@ export class AnonymousForm extends React.Component<any> {
   handleJoin(event: any) {
     event.preventDefault();
     console.log(event.target.name);
-    this.socket.emit(ChatLibrary.Anonymous, event.target.name.value);
+    this.socket.emit(ChatAPI.API_CODE, {
+      user_action: ChatLibrary.USER_ANONYMOUS,
+      user_id: event.target.name.value
+    } as UserPacketBase);
   }
 
   render() {

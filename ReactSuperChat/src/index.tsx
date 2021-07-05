@@ -15,7 +15,7 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <ColorModeScript />
-    <App />
+    <App children=""/>
   </React.StrictMode>,
   document.getElementById("root"),
 )

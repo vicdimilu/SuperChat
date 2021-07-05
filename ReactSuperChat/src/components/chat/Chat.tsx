@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Flex, Stack } from "@chakra-ui/react";
 
-import { io } from "socket.io-client";
-import { ChatLibrary } from "./State.Interface";
+import socketIOClient from "socket.io-client";
+import { ChatAPI, ChatLibrary, UserPacketBase, UserPacketLoginResponse, UserPacketResponse, UserPacketSendMsgResponse, UserSendMessagePacket } from "./State.Interface";
 import { ChatMessages } from "./MessageList";
 import { EScreenOrientation } from "../../App";
 import { ChatControls } from "../chat/ChatControls";
@@ -11,20 +11,33 @@ interface ChatProps {
   orientation: EScreenOrientation;
 }
 export const Chat = ({ orientation }: ChatProps) => {
-  let url: string = "http://127.0.0.1:5000";
-  let socket: any = io(url);
+  const ENDPOINT: string = "http://127.0.0.1:5000";
+  const socket: any = socketIOClient(ENDPOINT);
   const [messages, setMessages] = React.useState<any[]>([]);
   const [userName, setUserName] = React.useState("AnonymousUser");
   React.useEffect(() => {
-    socket.emit(ChatLibrary.Anonymous, userName);
+    socket.emit(ChatAPI.API_CODE, {user_action: ChatLibrary.USER_ANONYMOUS, user_id: userName} as UserPacketBase);
     //activate messages receptor
-    socket.on(ChatLibrary.GeneralChatMessage, (message: string) => {
-      setMessages(messages.concat(message));
+    socket.on(ChatAPI.API_CODE, (sResponse: UserPacketResponse) => {
+      switch (sResponse.user_action) {
+        case ChatLibrary.USER_ANONYMOUS:
+          let c1Response = sResponse as UserPacketLoginResponse;
+          setUserName(c1Response.username);
+          break;
+        case ChatLibrary.USER_SEND_MSG_TO_ROOM:
+          let c2Response = sResponse as UserPacketSendMsgResponse;
+          setMessages(messages.concat(c2Response.user_name+ ": "+ c2Response.user_message));
+          break;
+      
+        default:
+          break;
+      }
+      console.log("Mensaje recibido:", sResponse);
     });
     //Login Receptor
-    socket.on(ChatLibrary.Anonymous, (_packet: boolean) => {});
+    //socket.on(ChatLibrary.Anonymous, (_packet: boolean) => {});
     //Private Messeges Receptor
-    socket.on(ChatLibrary.PrivateChatMessage, (_msg: any) => {});
+    //socket.on(ChatLibrary.SuperChatAPI, (_msg: any) => {});
     return () => socket.disconnect();
   });
 
@@ -32,8 +45,15 @@ export const Chat = ({ orientation }: ChatProps) => {
     event.preventDefault();
     const MSGForm: HTMLFormElement = event.currentTarget;
     const MSG: string = MSGForm.MSGInput.value;
+    const request:UserSendMessagePacket = {
+      user_action: ChatLibrary.USER_SEND_MSG_TO_ROOM,
+      user_id: userName,
+      user_message: MSG,
+      user_name: userName,
+      message_room_id: 1
+    }
     //capturamos mensaje a enviar
-    socket.emit(ChatLibrary.GeneralChatMessage, MSG);
+    socket.emit(ChatAPI.API_CODE, request);
     MSGForm.MSGInput.value = "";
   }
   return (

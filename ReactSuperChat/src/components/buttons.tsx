@@ -20,9 +20,11 @@ export class ChatButton extends React.Component<{variant: ButtonVariants}, {}> {
             >
                 Send
             </Button>;
-    selectButton()
+    selectButton(test:any){
+        console.log(test);
+    }
 
     render() {
-        return this.selectButton(this.props.variant);
+        return this.SendButton;//this.selectButton(this.props.variant);
     }
 }
