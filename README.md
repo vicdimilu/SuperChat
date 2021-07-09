@@ -28,6 +28,7 @@ Use [http://localhost:5000](http://localhost:5000) to view it in the browser or 
 
 ## Tareas Restantes
 
+- Averiguar doble conexion de socket para mismo usuario en ioserver.ts > init().
 - Completar funciones de las salas de chat (Room > RoomManager).
 - Completar funciones de registro (User > UserManager).
 - Crear conexión de SQLlite3 (server > SQLServer).

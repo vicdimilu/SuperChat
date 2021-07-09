@@ -1,5 +1,5 @@
 import SocketIO = require('socket.io');
-import { UserLogin, UserSocketData } from './UserPacket.struct';
+import { UserAction, UserLogin, UserPacketLoginResponse, UserSocketData } from './UserPacket.struct';
 
 export class UserManager {
     private app: SocketIO.Server;
@@ -52,13 +52,12 @@ export class UserManager {
     serverLoginUserResponse(userSocket: SocketIO.Socket){
         const chatId:string = this.getUserChatIdToString(userSocket);
         const userSocketData = userSocket.data as UserSocketData;
-        const response = {user_name: userSocketData.username} as UserLogin;
+        const response = {user_action: UserAction.USER_ANONYMOUS, username: userSocketData.username} as UserPacketLoginResponse;
         console.log("UserManager.ts    > serverLoginUserResponse(): ","response = ",response);
         userSocket.emit(chatId, response);
     }
 
     getUserChatIdToString(userSocket: SocketIO.Socket): string{
-        const userSocketData = userSocket.data as UserSocketData;
-        return userSocketData.chat_id;
+        return (userSocket.data as UserSocketData).chat_id;
     }
 }

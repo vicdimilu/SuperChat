@@ -5,9 +5,13 @@ import { Chat } from "./components/chat/Chat";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChatMenu } from "./components/ChatMenu";
 import "emoji-mart/css/emoji-mart.css";
+import * as IO from "./controllers/SocketController";
 type AppProps = {
   children: any;
 };
+
+export var _SocketController: IO.SocketController = new IO.SocketController("http://127.0.0.1:5000");
+
 export enum EScreenOrientation {
   LANDSCAPE = 1,
   PORTRAIT = 2,
@@ -45,7 +49,7 @@ export const App = ({ children = null }: AppProps) => {
           h="100vh"
         >
           <ChatMenu />
-          <Chat orientation={getScreenOrientation()} />
+          <Chat orientation={getScreenOrientation()} socketController={_SocketController}/>
         </Flex>
       </HelmetProvider>
     </ChakraProvider>

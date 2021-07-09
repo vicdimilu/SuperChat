@@ -7,7 +7,7 @@ import {
   FormLabel,
   Button,
 } from "@chakra-ui/react";
-import { ChatAPI, ChatLibrary, UserPacketBase } from "../chat/State.Interface";
+import { ChatAPI, ChatLibrary, UserPacketBase } from "../../controllers/State.Interface";
 
 export class AnonymousForm extends React.Component<any> {
   private socket: any = null;
