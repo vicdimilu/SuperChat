@@ -7,7 +7,7 @@ export class ChatMessages extends React.Component<{ messages: any[] }, {}> {
     const messageList: any = (
       <Flex direction="column" fontFamily="raleway">
         {this.props.messages.map((m) => {
-          return <Message key={m} message={m} />;
+          return <Message key={m+Math.round(1000000)+Math.round(1000000)} message={m} />;
         })}
       </Flex>
     );
