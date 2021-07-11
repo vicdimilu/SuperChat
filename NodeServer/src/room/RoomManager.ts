@@ -6,7 +6,7 @@ export class RoomManager {
     constructor() {
     }
 
-    userCreateRoom(ownerSocket:SocketIO.Socket){
+    userCreateRoom(ownerSocket:SocketIO.Socket, roomName: string){
         //owner of the room must to be the user that create this.
 
     }

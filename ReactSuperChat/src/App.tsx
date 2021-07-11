@@ -1,17 +1,18 @@
-import * as React from "react";
 import { extendTheme, ChakraProvider, Flex } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import { Chat } from "./components/chat/Chat";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChatMenu } from "./components/ChatMenu";
 import "emoji-mart/css/emoji-mart.css";
-import * as IO from "./controllers/SocketController";
+import { _InitControllers } from "./controllers/Controllers";
+import { _UserCurrentRoomName, _UserIsAuthenticated } from "./controllers/UserController";
+
+//INIT CONTROLLERS
+_InitControllers("http://127.0.0.1:5000", true);
+
 type AppProps = {
   children: any;
 };
-
-export var _SocketController: IO.SocketController = new IO.SocketController("http://127.0.0.1:5000");
-
 export enum EScreenOrientation {
   LANDSCAPE = 1,
   PORTRAIT = 2,
@@ -20,7 +21,9 @@ export const getScreenOrientation: () => EScreenOrientation = () =>
   window.innerWidth < window.innerHeight
     ? EScreenOrientation.PORTRAIT
     : EScreenOrientation.LANDSCAPE;
+    
 export const App = ({ children = null }: AppProps) => {
+
   return (
     <ChakraProvider
       theme={extendTheme({
@@ -48,8 +51,8 @@ export const App = ({ children = null }: AppProps) => {
           justify="center"
           h="100vh"
         >
-          <ChatMenu />
-          <Chat orientation={getScreenOrientation()} socketController={_SocketController}/>
+          <ChatMenu userIsAuthenticated={_UserIsAuthenticated()} currentRoom={_UserCurrentRoomName()} roomUsersNumber={0}/>
+          <Chat orientation={getScreenOrientation()}/>
         </Flex>
       </HelmetProvider>
     </ChakraProvider>

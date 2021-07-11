@@ -24,8 +24,8 @@ export class ChatServer{
     connect(socket: SocketIO.Socket){
         socket.on(this.chatID,(request: UserPacketBase) => {
             //llamar protocolo para ejecutar acción
-            console.log("ChatServer.ts      > connect(): Usuario envia acción: "+request.user_action);
-            this.gChatProtocol.getServerResponse(this.chatID, socket, request);
+            console.log("ChatServer.ts      > connect(): RECV_REQUEST: ",request);
+            this.gChatProtocol.execActionRequest(this.chatID, socket, request);
         });
     }
 

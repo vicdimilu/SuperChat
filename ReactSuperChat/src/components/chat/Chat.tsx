@@ -1,21 +1,26 @@
-import * as React from "react";
 import { Flex, Stack } from "@chakra-ui/react";
-
-import { ChatLibrary, UserPacketBase, UserPacketLoginResponse, UserPacketResponse, UserPacketSendMsgResponse, UserProfile, UserSendMessagePacket } from "../../controllers/State.Interface";
 import { ChatMessages } from "./MessageList";
 import { EScreenOrientation } from "../../App";
 import { ChatControls } from "../chat/ChatControls";
-import { SocketController } from "../../controllers/SocketController";
+import { useState, useEffect } from "react";
+import { ChatLibrary, UserPacketBase, UserProfile, UserSendMessagePacket } from "../../controllers/State.Interface";
+import { _UserSocketSendRequest, _UserSocketSubscribe } from "../../controllers/UserSocketController";
+import { _UserGetSelectedIdRoom, _UserGetUsername, _UserIsAuthenticated } from "../../controllers/UserController";
 
 interface ChatProps {
   orientation: EScreenOrientation;
-  socketController: SocketController
 }
-export const Chat = ({ orientation, socketController }: ChatProps) => {
-  React.useEffect(() => {
-    socketController.setChat.bind(this);
-    socketController.sendRequest({user_action: ChatLibrary.USER_ANONYMOUS, user_id: "anonymous"} as UserPacketBase);
-    return () => socketController.disconnect();
+export const Chat = ({ orientation }: ChatProps) => {
+
+  const [chatRoomMsg, setChatRoomMsg] = useState([""]);
+
+  useEffect(() => {
+    //Only test Anonymous
+    if(!_UserIsAuthenticated()){
+      _UserSocketSendRequest({user_action: ChatLibrary.USER_ANONYMOUS, user_id: "anonymous"} as UserPacketBase);
+      _UserSocketSubscribe(ChatLibrary.USER_SEND_MSG_TO_ROOM, handleRecvMsgToChat);
+    }
+    return;
   });
 
   function handleSendMessage(event: React.FormEvent<HTMLFormElement>) {
@@ -24,15 +29,20 @@ export const Chat = ({ orientation, socketController }: ChatProps) => {
     const MSG: string = MSGForm.MSGInput.value;
     const request:UserSendMessagePacket = {
       user_action: ChatLibrary.USER_SEND_MSG_TO_ROOM,
-      user_id: socketController.accountProfile.username,
+      user_id: _UserGetUsername(),
       user_message: MSG,
-      user_name: socketController.accountProfile.username,
-      message_room_id: +socketController.accountProfile.selectedRoomId
+      user_name: _UserGetUsername(),
+      message_room_id: +_UserGetSelectedIdRoom()
     }
-    //capturamos mensaje a enviar
-    socketController.sendRequest(request);
+    //enviamos mensaje
+    _UserSocketSendRequest(request);
     MSGForm.MSGInput.value = "";
   }
+
+  function handleRecvMsgToChat(err: string, user:UserProfile){
+    setChatRoomMsg(user.rooms[+user.selectedRoomId].msgs);
+  }
+
   return (
     <Flex
       w="95%"
@@ -52,7 +62,7 @@ export const Chat = ({ orientation, socketController }: ChatProps) => {
         justify="space-between"
         spacing={0}
       >
-        <ChatMessages messages={socketController.accountProfile.rooms[+socketController.accountProfile.selectedRoomId].msgs} />
+        <ChatMessages messages={chatRoomMsg} />
         <ChatControls handleSendMessage={handleSendMessage} />
       </Stack>
     </Flex>

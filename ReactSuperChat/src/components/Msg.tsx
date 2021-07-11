@@ -3,7 +3,6 @@ import { Flex } from "@chakra-ui/react";
 
 export class Message extends React.Component<{ message: string }, {}> {
   render() {
-    console.log(this.props.message);
     return (
       <Flex
         justify="start"

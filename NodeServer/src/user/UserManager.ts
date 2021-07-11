@@ -1,5 +1,5 @@
 import SocketIO = require('socket.io');
-import { UserAction, UserLogin, UserPacketLoginResponse, UserSocketData } from './UserPacket.struct';
+import { RoomPacketResponse, UserAction, UserLogin, UserPacketLoginResponse, UserSocketData } from './UserPacket.struct';
 
 export class UserManager {
     private app: SocketIO.Server;
@@ -13,7 +13,7 @@ export class UserManager {
             ([key,value]) => {
             socket.data[key] = value;
         })
-        console.log("UserManager.ts    > setUserDataToSocketData(): ","Socket.data = ",socket.data);
+        console.log("UserManager.ts     > setUserDataToSocketData(): ","Socket.data = ",socket.data);
         return socket.data as UserSocketData;
     }
 
@@ -31,17 +31,17 @@ export class UserManager {
     }
 
     userEmitMsgToAll(emitUserSocket: SocketIO.Socket, response:any){//testear
-        this.app.emit(this.getUserChatIdToString(emitUserSocket), response);
+        this.app.emit(this.getUserSocketData(emitUserSocket).chat_id, response);
     }
 
     userEmitMsgToAnotherUser(emitUserSocket:SocketIO.Socket, anotherUserSocket:SocketIO.Socket, response:any){//Testear
-        const chatId:string = this.getUserChatIdToString(emitUserSocket);
+        const chatId:string = this.getUserSocketData(emitUserSocket).chat_id;
         emitUserSocket.emit(chatId, response);
         anotherUserSocket.emit(chatId, response);
     }
 
     userEmitMsgToRoom(emitUserSocket: SocketIO.Socket, roomId: number, response:any){//testear
-        this.app.in(""+roomId).emit(this.getUserChatIdToString(emitUserSocket), response)
+        this.app.in(""+roomId).emit(this.getUserSocketData(emitUserSocket).chat_id, response)
     }
 
     userDisconnect(userSocket: SocketIO.Socket){//pendiente
@@ -50,14 +50,17 @@ export class UserManager {
     }
 
     serverLoginUserResponse(userSocket: SocketIO.Socket){
-        const chatId:string = this.getUserChatIdToString(userSocket);
-        const userSocketData = userSocket.data as UserSocketData;
-        const response = {user_action: UserAction.USER_ANONYMOUS, username: userSocketData.username} as UserPacketLoginResponse;
-        console.log("UserManager.ts    > serverLoginUserResponse(): ","response = ",response);
+        const chatId:string = this.getUserSocketData(userSocket).chat_id;
+        const response = {
+            user_action: UserAction.USER_ANONYMOUS, 
+            username: this.getUserSocketData(userSocket).username,
+            rooms: [{roomId: "0", roomName: "General"}]
+        } as UserPacketLoginResponse;
+        console.log("UserManager.ts     > serverLoginUserResponse(): ","response = ",response);
         userSocket.emit(chatId, response);
     }
 
-    getUserChatIdToString(userSocket: SocketIO.Socket): string{
-        return (userSocket.data as UserSocketData).chat_id;
+    getUserSocketData(userSocket: SocketIO.Socket): UserSocketData{
+        return userSocket.data as UserSocketData;
     }
 }

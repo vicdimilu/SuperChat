@@ -50,7 +50,13 @@ export interface UserPacketResponse{
 }
 
 export interface UserPacketLoginResponse extends UserPacketResponse{
-    username: string
+    username: string,
+    rooms?:Array<RoomPacketResponse>
+}
+
+export interface RoomPacketResponse {
+    roomId: string,
+    roomName: string
 }
 
 export interface UserPacketSendMsgResponse extends UserPacketResponse{
