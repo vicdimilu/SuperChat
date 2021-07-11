@@ -1,22 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { ColorModeScript } from "@chakra-ui/react"
+import * as React from "react"
+import ReactDOM from "react-dom"
+import { App } from "./App"
+import reportWebVitals from "./reportWebVitals"
+import * as serviceWorker from "./serviceWorker"
+import "@fontsource/raleway/400.css"
+import "@fontsource/indie-flower/400.css"
+import "@fontsource/fredoka-one/400.css"
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-const appTitle:string = "SuperChat "
-const titleContainer = <div className="flex flex-col justify-center bg-gray-200 min-h-screen">
-                            <h1 className="font-semibold p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center text-gray-500 space-x-4">{appTitle}<sub>~ Testing Tailwind utilities</sub>  </h1>
-                       </div>
+
+
 
 
 ReactDOM.render(
   <React.StrictMode>
-      {titleContainer}
+    <ColorModeScript />
+    <App children=""/>
   </React.StrictMode>,
-  document.getElementById('root')
-);
+  document.getElementById("root"),
+)
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorker.unregister()
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals()
