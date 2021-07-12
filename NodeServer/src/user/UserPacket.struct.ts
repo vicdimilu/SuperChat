@@ -56,7 +56,7 @@ export interface UserPacketResponse{
 
 export interface UserPacketLoginResponse extends UserPacketResponse{
     username: string,
-    room?:RoomPacketResponse
+    room:RoomPacketResponse
 }
 
 export interface RoomPacketResponse {

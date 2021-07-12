@@ -1,6 +1,6 @@
 import { _ConsoleLog } from "./DevConsoleController";
 import { Room } from "./Room";
-import { RoomPacketResponse, UserProfile } from "./State.Interface";
+import { UserProfile } from "./State.Interface";
 
 let user: UserProfile;
 
@@ -41,8 +41,8 @@ export const _UserGetRoom = (roomId: string) : Room => {
     return user.rooms[+roomId];
 }
 
-export const _UserSetRoom = (room: RoomPacketResponse) => {
-    user.rooms[+room.roomId] = new Room(room.roomId, room.roomName, room.messages);
+export const _UserSetRoom = (roomId:string, roomName:string, roomChat:Array<string>) => {
+    user.rooms[+roomId] = new Room(roomId, roomName, roomChat);
 }
 
 export const _UserChangeRoom = (roomId: string) => {

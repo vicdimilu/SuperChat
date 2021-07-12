@@ -2,7 +2,6 @@ import * as IOSocket from "socket.io-client";
 import socketIOClient from "socket.io-client";
 import { _ConsoleLog } from "./DevConsoleController";
 import { ChatAPI, UserPacketResponse } from "./State.Interface";
-import { _UserGetProfile } from "./UserController";
 import { _Protocol } from "./UserProtocolController";
 
 let socket: IOSocket.Socket;
@@ -31,8 +30,8 @@ export const _UserSocketSubscribe = (actionId: number, _HandleFunctionPacketRecv
     if(!isLoadUserSocketListeners){
         arrayHandleFunctionsPacketRecv[actionId] = _HandleFunctionPacketRecv;
         socket.on(ChatAPI.API_CODE, (response: UserPacketResponse) => {
-            _ConsoleLog("UserSocketController.ts > _UserSocketSendRequest(): Packete Recibido correctamente.", response);
-            _Protocol(_UserGetProfile(), response, arrayHandleFunctionsPacketRecv);
+            _ConsoleLog("UserSocketController.ts > _UserSocketSubscribe(): Packete Recibido correctamente.", response);
+            _Protocol(response, arrayHandleFunctionsPacketRecv);
         });
         isLoadUserSocketListeners = true;
         return true;

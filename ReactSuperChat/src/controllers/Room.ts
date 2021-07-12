@@ -1,4 +1,3 @@
-import { RoomPacketResponse } from "./State.Interface";
 
 export class Room {
     private roomId: string;

@@ -53,7 +53,7 @@ export interface UserPacketLoginResponse extends UserPacketResponse{
 export interface RoomPacketResponse {
     roomId: string,
     roomName: string,
-    messages: Array<string>
+    roomChat: Array<string>
 }
 
 export interface UserPacketSendMsgResponse extends UserPacketResponse{

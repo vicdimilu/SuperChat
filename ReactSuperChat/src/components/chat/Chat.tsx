@@ -18,6 +18,7 @@ export const Chat = ({ orientation }: ChatProps) => {
     //Only test Anonymous
     if(!_UserIsAuthenticated()){
       _UserSocketSendRequest({user_action: ChatLibrary.USER_ANONYMOUS, user_id: "anonymous"} as UserPacketBase);
+      _UserSocketSubscribe(ChatLibrary.USER_ANONYMOUS, handleRecvMsgToChat);
       _UserSocketSubscribe(ChatLibrary.USER_SEND_MSG_TO_ROOM, handleRecvMsgToChat);
     }
     return;
