@@ -51,6 +51,7 @@ export class ChatProtocol {
                 request_aux.user_name = userSocketData.username;
                 this.gRoomManager.userSendMessageToRoom(request_aux.message_room_id, request_aux.user_name+": "+request_aux.user_message);
                 this.gUserManager.userEmitMsgToAll(userSocket, request_aux);
+                this._SaveServer(chatId);
                 break;
 
             case UserAction.USER_CREATE_ROOM:

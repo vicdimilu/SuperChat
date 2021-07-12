@@ -32,7 +32,11 @@ export class SQLServer{
     }
 
     _GetUserData(chatId: string, uId: string): UserModel{
-        return this._ChatServerDatabase(chatId).sChatUsers.find(userModel => userModel.uId == uId);
+        try {
+            return this._ChatServerDatabase(chatId).sChatUsers.find(userModel => userModel.uId == uId);
+        } catch (error) {
+            return null;
+        }
     }
 
     _CreateChatServer(): boolean{
@@ -54,6 +58,7 @@ export class SQLServer{
     }
 
     _SaveChatServer(modelChatServer: ChatServerModel){
-        console.log(fs.writeFileSync(this._PathDatabase+this._PrefixName+modelChatServer.sChatId+".json",JSON.stringify(modelChatServer)));
+        const fileName = this._PrefixName+modelChatServer.sChatId.split("0x")[1]+".json";
+        fs.writeFileSync(this._PathDatabase+fileName,JSON.stringify(modelChatServer),{encoding: 'utf8'});
     }
 }
