@@ -5,7 +5,6 @@ import cors = require('cors');
 export class ExpressServer {
   public app : express.Application;
 
-
   constructor(private port : number){
     this.app = express();
     //Rutero y CORS para express
@@ -14,7 +13,7 @@ export class ExpressServer {
   }
 
   start(callback ?: ()=>void){
-    this.app.listen(this.port, "localhost", 0, callback)
+    this.app.listen(this.port, "localhost", 0, callback);
   }
 
   static init(port : number) : ExpressServer{

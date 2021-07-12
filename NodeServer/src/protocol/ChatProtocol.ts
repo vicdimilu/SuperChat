@@ -1,8 +1,9 @@
 import { RoomManager } from "../room/RoomManager";
 import { SQLServer } from "../server/SQLServer";
 import { UserManager } from "../user/UserManager";
-import { UserAction, UserLogin, UserPacketBase, UserSendMessagePacket, UserSocketData } from "../user/UserPacket.struct";
+import { UserAction, UserPacketBase, UserSendMessagePacket, UserSocketData } from "../user/UserPacket.struct";
 import SocketIO = require('socket.io');
+import { ChatServerModel } from "../database/models/ChatServerModel";
 
 export class ChatProtocol {
     private gSQLServer: SQLServer;
@@ -25,7 +26,7 @@ export class ChatProtocol {
                     username: "anonymous#"+userSocket.id.slice(0,4),
                 }
                 this.gUserManager.setUserDataToSocketData(userSocket, userSocketData);
-                this.gUserManager.serverLoginUserResponse(userSocket);
+                this.gUserManager.serverLoginUserResponse(userSocket, this.gRoomManager.userFindRoomById(0));
                 break;
 
             case UserAction.USER_LOGIN:
@@ -48,7 +49,8 @@ export class ChatProtocol {
                 console.log("ChatProtocol.ts    > execActionRequest(): ","UserAction.USER_SEND_MSG_TO_ROOM");
                 let request_aux = request as UserSendMessagePacket;
                 request_aux.user_name = userSocketData.username;
-                this.gUserManager.userEmitMsgToAll(userSocket, request_aux)
+                this.gRoomManager.userSendMessageToRoom(request_aux.message_room_id, request_aux.user_name+": "+request_aux.user_message);
+                this.gUserManager.userEmitMsgToAll(userSocket, request_aux);
                 break;
 
             case UserAction.USER_CREATE_ROOM:
@@ -66,5 +68,17 @@ export class ChatProtocol {
             default:
                 return false;
         }
+    }
+
+    _SaveServer(chatId: string){
+        this.gSQLServer._SaveChatServer(this.getChatServerModel(chatId));
+    }
+
+    private getChatServerModel(chatId: string){
+        return {
+            sChatId: chatId,
+            sChatUsers: this.gUserManager.getArrayUserToModel(this.gSQLServer),
+            sChatRooms: this.gRoomManager.getArrayRoomToModel()
+        } as ChatServerModel;
     }
 }

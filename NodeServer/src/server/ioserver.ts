@@ -2,18 +2,21 @@ import { ExpressServer } from './express';
 import http = require('http');
 import SocketIO = require('socket.io');
 import { ChatServer } from './ChatServer';
-import { UserSocketData } from '../user/UserPacket.struct';
+import { SQLServer } from './SQLServer';
 
 export class IOServer {
     private expressServer : ExpressServer; //express server
     private serverHTTP : http.Server;//apirest server
     private app: SocketIO.Server;
     private chatServers: Array<ChatServer>;
+    private gSQLServer: SQLServer;
+    private wasCleanedUp = false;
   
-    constructor(private port : number){
+    constructor(private port : number, pathDatabase: string){
       //Server Express y API REST
       this.expressServer = ExpressServer.init(port);
       this.serverHTTP = http.createServer(this.expressServer.app);
+      this.gSQLServer = new SQLServer(pathDatabase);
       this.chatServers = [];
 
       let originURL:string = "*";
@@ -30,12 +33,16 @@ export class IOServer {
     start(){
       this.serverHTTP.listen(this.port, () => console.log("listening on http://localhost:"+this.port));
       this.loadChatServers();
+      //Run function listener when close Node
+      this.runBeforeExiting(()=>{
+        console.log('clean my application, close the DB connection, etc');
+        this.saveAllToDatabase();
+      });
     }
 
     loadChatServers(){
-      const totalServers = 1;//cambiar despues a llamada servidor sql para que me entregue el total de chats de clientes
-      for (let i = 0; i < totalServers; i++) {
-        this.chatServers[i] = new ChatServer(this.app, i);
+      for (let i = 0; i < this.gSQLServer.totalServers; i++) {
+        this.chatServers[i] = new ChatServer(this.app, this.gSQLServer, i);
       }
     }
 
@@ -53,10 +60,28 @@ export class IOServer {
           console.log("ioserver.ts > init(): ",reason);
         });*/
 
-        console.log("ioserver.ts        > init(): Nuevo usuario conectado");
+        console.log("ioserver.ts        > init(): Usuario conectado a Servidor Chat ID", socket.eventNames()[0]);
       });
       //Usuario desconectado
-
     }
 
-  }
+    //Listener finish Node Process By someone Signal
+    private runBeforeExiting(fun: Function) {
+      const exitSignals = ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException'];
+      for (const signal of exitSignals) {
+        process.on(signal as any, async () => { // eslint-disable-line @typescript-eslint/no-explicit-any
+          if (!this.wasCleanedUp) {
+            await fun();
+            this.wasCleanedUp = true;
+          }
+          process.exit();
+        });
+      }
+    };
+
+    private saveAllToDatabase(){
+      this.chatServers.forEach(chatServer => {
+        chatServer.saveChatServer();
+      });
+    }
+}

@@ -8,13 +8,11 @@ import { RoomManager } from "../room/RoomManager";
 export class ChatServer{
     private chatID: string;
     private gChatProtocol: ChatProtocol;
-    private app: SocketIO.Server;
 
-    constructor(app: SocketIO.Server, chatID:number){
+    constructor(app: SocketIO.Server, gSQLServer: SQLServer, chatID:number){
         this.chatID = "0x"+chatID;
-        console.log("ChatServer.ts      > constructor(): Servidor de Chat ID: "+this.chatID);
-        this.app = app;
-        this.gChatProtocol = new ChatProtocol(new SQLServer(chatID), new UserManager(app), new RoomManager());
+        console.log("ChatServer.ts      > constructor(): Servidor levantado con Chat ID: "+this.chatID);
+        this.gChatProtocol = new ChatProtocol(gSQLServer, new UserManager(app), new RoomManager(gSQLServer._GetRooms(""+this.getId())));
     }
 
     getId():number{
@@ -31,5 +29,9 @@ export class ChatServer{
 
     disconnect(socket: SocketIO.Socket, reason:any){//PENDIENTE (buscar tipo de la variable reason)
         //hacer algo con la desconección
+    }
+
+    saveChatServer(){//pendiente
+        this.gChatProtocol._SaveServer(this.chatID.split("x")[1]);
     }
 }

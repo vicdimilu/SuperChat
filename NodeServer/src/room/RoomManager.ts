@@ -1,9 +1,11 @@
-import { Room } from "./room";
+import { Room } from "./RoomStruct";
 import SocketIO = require('socket.io');
+import { RoomModel } from "../database/models/ChatServerModel";
 
 export class RoomManager {
     private rooms: Array<Room>;
-    constructor() {
+    constructor(rooms: Array<Room>) {
+        this.rooms = rooms;
     }
 
     userCreateRoom(ownerSocket:SocketIO.Socket, roomName: string){
@@ -36,5 +38,17 @@ export class RoomManager {
     userOwnerDelAdminsToRoom(ownerSocket: SocketIO.Socket, adminSockets: Array<SocketIO.Socket>, roomId:number){
         //user have to be owner of the room
 
+    }
+
+    getArrayRoomToModel(): Array<RoomModel>{
+        return this.rooms as Array<RoomModel>;
+    }
+
+    userSendMessageToRoom(roomId: number, msg: string){
+        this.rooms[roomId].rChat.push(msg);
+    }
+
+    userFindRoomById(roomId: number): Room{
+        return this.rooms[roomId];
     }
 }

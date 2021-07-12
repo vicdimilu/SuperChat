@@ -47,12 +47,13 @@ export interface UserPacketResponse{
 
 export interface UserPacketLoginResponse extends UserPacketResponse{
     username: string,
-    rooms:Array<RoomPacketResponse>
+    room:RoomPacketResponse
 }
 
 export interface RoomPacketResponse {
     roomId: string,
-    roomName: string
+    roomName: string,
+    messages: Array<string>
 }
 
 export interface UserPacketSendMsgResponse extends UserPacketResponse{

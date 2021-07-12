@@ -1,12 +1,14 @@
+import { RoomPacketResponse } from "./State.Interface";
+
 export class Room {
     private roomId: string;
     private roomName: string;
     private messages: Array<string>;
 
-    constructor(roomId: string, roomName: string){
+    constructor(roomId: string, roomName: string, roomMessages:Array<string>){
         this.roomId = roomId;
         this.roomName = roomName;
-        this.messages = [];
+        this.messages = roomMessages;
     }
 
     

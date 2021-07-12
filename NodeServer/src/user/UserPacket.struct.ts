@@ -41,7 +41,12 @@ export enum UserAction{
 
 export interface UserSocketData{
     chat_id?: string,
-    username?:string
+    userId?: string,
+    username?:string,
+    userNick?: string,
+    userRoomsOwnerId?: Array<string>,
+    userRoomsAdminId?: Array<string>,
+    userRoomsMemberId?: Array<string>
 }
 
 //USER RESPONSES
@@ -51,12 +56,13 @@ export interface UserPacketResponse{
 
 export interface UserPacketLoginResponse extends UserPacketResponse{
     username: string,
-    rooms?:Array<RoomPacketResponse>
+    room?:RoomPacketResponse
 }
 
 export interface RoomPacketResponse {
     roomId: string,
-    roomName: string
+    roomName: string,
+    roomChat: Array<string>
 }
 
 export interface UserPacketSendMsgResponse extends UserPacketResponse{

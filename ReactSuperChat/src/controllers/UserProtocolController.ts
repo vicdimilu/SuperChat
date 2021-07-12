@@ -10,9 +10,7 @@ export const _Protocol = (user: UserProfile, packetRECV: UserPacketResponse, _Ar
             const response = packetRECV as UserPacketLoginResponse;
             user.username = response.username;
             user.isAuthenticated = true;
-            response.rooms.forEach(pRoom => {
-                _UserSetRoom(pRoom.roomId, pRoom.roomName);
-            });
+            _UserSetRoom(response.room);
             _ConsoleLog("UserProtocolController.ts > _Protocol(): USER_ANONYMOUS", user.username);
             if(_ArrayFunctionPacketRecv[ChatLibrary.USER_ANONYMOUS])
                 _ArrayFunctionPacketRecv[ChatLibrary.USER_ANONYMOUS](null, user);
